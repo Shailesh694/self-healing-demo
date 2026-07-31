@@ -1,0 +1,50 @@
+name: CI Security and Quality Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  scan-and-detect:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Scanner Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 trivy-python
+
+      - name: Run Linter (Flake8)
+        run: |
+          flake8 . --output-file=linter_errors.log || true
+          cat linter_errors.log
+
+      - name: Run Security Scanner (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+          output: 'cve_errors.log'
+
+      - name: Upload Logs as Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-logs
+          path: |
+            linter_errors.log
+            cve_errors.log
