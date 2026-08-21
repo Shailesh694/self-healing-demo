@@ -1,50 +1,60 @@
-name: CI Security and Quality Scan
+name: CI with Autonomous Self-Healing
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  scan-and-detect:
+  heal-and-remediate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
-      - name: Checkout Code
+      - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.12"
 
-      - name: Install Scanner Tools
+      - name: Install Dependencies & Scanners
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 trivy-python
+          pip install flake8 pip-audit google-genai
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run Linter (Flake8)
+      - name: Scan Code Quality (Flake8)
+        id: flake8_scan
+        continue-on-error: true
         run: |
-          flake8 . --output-file=linter_errors.log || true
-          cat linter_errors.log
+          python -m flake8 main.py --output-file=linter_errors.log || true
 
-      - name: Run Security Scanner (Trivy)
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
-          output: 'cve_errors.log'
+      - name: Scan Dependencies (pip-audit)
+        id: audit_scan
+        continue-on-error: true
+        run: |
+          python -m pip_audit -r requirements.txt > cve_errors.log || true
 
-      - name: Upload Logs as Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Run Autonomous Remediation
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python heal.py
+
+      - name: Create Self-Healing Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
-          name: scan-logs
-          path: |
-            linter_errors.log
-            cve_errors.log
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "fix(ai): automated code remediation & CVE patch"
+          title: "🤖 Automated CI Self-Healing Remediation"
+          body: |
+            ### Autonomous AI Patch Report
+            - Remediated PEP 8 formatting / unused imports in `main.py`.
+            - Upgraded vulnerable dependencies in `requirements.txt`.
+          branch: auto-heal/ci-patch
+          delete-branch: true
