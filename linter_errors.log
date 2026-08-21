@@ -1,0 +1,24 @@
+[1mmain.py[m[36m:[m1[36m:[m1[36m:[m [1m[31mF401[m 'os' imported but unused
+[1mmain.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mF401[m 'sys' imported but unused
+[1mmain.py[m[36m:[m4[36m:[m1[36m:[m [1m[31mE302[m expected 2 blank lines, found 1
+[1mmain.py[m[36m:[m4[36m:[m20[36m:[m [1m[31mE231[m missing whitespace after ','
+[1mmain.py[m[36m:[m5[36m:[m11[36m:[m [1m[31mE225[m missing whitespace around operator
+[1mmain.py[m[36m:[m8[36m:[m1[36m:[m [1m[31mE305[m expected 2 blank lines after class or function definition, found 1
+[1mmain.py[m[36m:[m8[36m:[m22[36m:[m [1m[31mE231[m missing whitespace after ','
+[1mmain.py[m[36m:[m8[36m:[m27[36m:[m [1m[31mW292[m no newline at end of file
+[1mmain.py[m[36m:[m1[36m:[m1[36m:[m [1m[31mF401[m 'os' imported but unused
+[1mmain.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mF401[m 'sys' imported but unused
+[1mmain.py[m[36m:[m4[36m:[m1[36m:[m [1m[31mE302[m expected 2 blank lines, found 1
+[1mmain.py[m[36m:[m4[36m:[m20[36m:[m [1m[31mE231[m missing whitespace after ','
+[1mmain.py[m[36m:[m5[36m:[m11[36m:[m [1m[31mE225[m missing whitespace around operator
+[1mmain.py[m[36m:[m8[36m:[m1[36m:[m [1m[31mE305[m expected 2 blank lines after class or function definition, found 1
+[1mmain.py[m[36m:[m8[36m:[m22[36m:[m [1m[31mE231[m missing whitespace after ','
+[1mmain.py[m[36m:[m8[36m:[m27[36m:[m [1m[31mW292[m no newline at end of file
+[1mmain.py[m[36m:[m1[36m:[m1[36m:[m [1m[31mF401[m 'os' imported but unused
+[1mmain.py[m[36m:[m2[36m:[m1[36m:[m [1m[31mF401[m 'sys' imported but unused
+[1mmain.py[m[36m:[m4[36m:[m1[36m:[m [1m[31mE302[m expected 2 blank lines, found 1
+[1mmain.py[m[36m:[m4[36m:[m20[36m:[m [1m[31mE231[m missing whitespace after ','
+[1mmain.py[m[36m:[m5[36m:[m11[36m:[m [1m[31mE225[m missing whitespace around operator
+[1mmain.py[m[36m:[m8[36m:[m1[36m:[m [1m[31mE305[m expected 2 blank lines after class or function definition, found 1
+[1mmain.py[m[36m:[m8[36m:[m22[36m:[m [1m[31mE231[m missing whitespace after ','
+[1mmain.py[m[36m:[m8[36m:[m27[36m:[m [1m[31mW292[m no newline at end of file
