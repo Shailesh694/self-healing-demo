@@ -1,9 +1,29 @@
 import os
+import time
 from concurrent.futures import ThreadPoolExecutor
 from google import genai
 from google.genai import types
 
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+
+
+def generate_with_fallback(prompt: str, config: types.GenerateContentConfig = None) -> str:
+    """Generate content with automatic retry and model fallback on 503 / high demand."""
+    models_to_try = ["gemini-3.6-flash", "gemini-2.5-flash"]
+
+    for model_name in models_to_try:
+        for attempt in range(3):
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config=config,
+                )
+                return response.text
+            except Exception as e:
+                print(f"Warning: {model_name} attempt {attempt + 1} failed: {e}")
+                time.sleep(2)
+    raise RuntimeError("All models and retry attempts failed.")
 
 
 def get_model_config(error_context: str) -> types.GenerateContentConfig:
@@ -44,15 +64,9 @@ def fix_linter():
     Return ONLY the raw corrected Python code. Do not include markdown code block formatting or explanations.
     """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt,
-        config=config,
-    )
+    raw_text = generate_with_fallback(prompt, config)
+    clean_code = raw_text.replace("```python", "").replace("```", "").strip()
 
-    clean_code = response.text.replace("```python", "").replace("```", "").strip()
-
-    # Append '\n' at the end to satisfy PEP 8 / W292
     with open("main.py", "w") as f:
         f.write(clean_code + "\n")
 
@@ -88,15 +102,9 @@ def fix_cve():
     Return ONLY the updated requirements.txt content. Do not include markdown code blocks or explanations.
     """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt,
-        config=config,
-    )
+    raw_text = generate_with_fallback(prompt, config)
+    clean_reqs = raw_text.replace("```text", "").replace("```", "").strip()
 
-    clean_reqs = response.text.replace("```text", "").replace("```", "").strip()
-
-    # Append '\n' at the end as well
     with open("requirements.txt", "w") as f:
         f.write(clean_reqs + "\n")
 
