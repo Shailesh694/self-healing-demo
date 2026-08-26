@@ -59,3 +59,11 @@ main.py:4:20: E231 missing whitespace after ','
 main.py:5:11: E225 missing whitespace around operator
 main.py:8:1: E305 expected 2 blank lines after class or function definition, found 1
 main.py:8:22: E231 missing whitespace after ','
+main.py:1:1: F401 'os' imported but unused
+main.py:2:1: F401 'sys' imported but unused
+main.py:4:1: E302 expected 2 blank lines, found 1
+main.py:4:20: E231 missing whitespace after ','
+main.py:5:11: E225 missing whitespace around operator
+main.py:8:1: E305 expected 2 blank lines after class or function definition, found 1
+main.py:8:22: E231 missing whitespace after ','
+main.py:9:1: W391 blank line at end of file
