@@ -78,7 +78,7 @@ def apply_patch(
         command = [
             "git",
             "apply",
-            "--whitespace=error",
+            "--ignore-whitespace",
         ]
 
         if str(relative_parent) != ".":
