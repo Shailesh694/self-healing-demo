@@ -5,7 +5,7 @@ from dataclasses import asdict
 from fastapi import FastAPI, HTTPException
 
 from .events import incident_detected
-from .incident_manager import IncidentManager
+from .runtime import incident_manager
 from .models import Incident
 from .policy import RepairPolicy
 from .webhook import parse_webhook
@@ -17,7 +17,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-incident_manager = IncidentManager()
 
 
 @app.get("/health")
